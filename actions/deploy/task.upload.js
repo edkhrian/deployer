@@ -35,9 +35,9 @@ module.exports = {
                     }
                     resolve(response);
                 })
-                // .stdout.on('data', function (res) {
-                //     console.log(String(res).trim());
-                // })
+                .stdout.on('data', function (res) {
+                    console.log(String(res).trim());
+                })
         })
     },
     onDestroy() {

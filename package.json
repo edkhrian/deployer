@@ -1,6 +1,6 @@
 {
   "name": "@edunse/deployer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Let's make deployment great again",
   "main": "index.js",
   "scripts": {},
