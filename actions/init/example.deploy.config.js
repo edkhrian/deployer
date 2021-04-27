@@ -12,13 +12,13 @@ module.exports = {
         },
         {
             name: 'clear',
-            filesOlderHours: 24,
+            filesOlder: 24 * 3600 * 1000, // optional
             dest: '/path/to/remote/folder',
-            fileTest: /\.(js|css)$/
+            fileTest: /\.(js|css)$/ // optional
         },
         {
             name: 'command',
-            commandFolder: '/path/to/remote/folder',
+            src: '/path/to/remote/folder/to/run/command/in', // optional
             command: 'pm2 restart server'
         }
     ]

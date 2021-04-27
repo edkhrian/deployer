@@ -18,3 +18,5 @@ or
 ```bash
 npm run deploy
 ```
+
+### Dependencies

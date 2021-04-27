@@ -1,15 +1,13 @@
 const path = require('path');
 const FTPS = require('ftps');
 
-let ftps;
-
 module.exports = {
-    onInit(project, data) {
-        ftps = new FTPS({
-            host: project.host,
+    onInit(config, data) {
+        this.ftps = new FTPS({
+            host: config.host,
             port: '22',
-            username: project.username,
-            password: project.password,
+            username: config.username,
+            password: config.password,
             protocol: 'sftp',
             autoConfirm: true
         });
@@ -20,7 +18,7 @@ module.exports = {
             let srcList = typeof taskData.src == 'string' ? [taskData.src] : taskData.src;
             srcList.forEach((relativePath) => {
                 const localDir = path.join(process.cwd(), relativePath);
-                ftps = ftps.mirror({
+                this.ftps = this.ftps.mirror({
                     remoteDir: taskData.dest,
                     localDir: localDir,
                     parallel: true,
@@ -29,17 +27,17 @@ module.exports = {
                     options: '--verbose=2 --overwrite'
                 })
             });
-            ftps
+            this.ftps
                 .exec((err, response) => {
                     if (err) {
                         reject(err);
-                    } else {
-                        resolve(response);
+                        return;
                     }
+                    resolve(response);
                 })
-                .stdout.on('data', function (res) {
-                    console.log(String(res).trim());
-                })
+                // .stdout.on('data', function (res) {
+                //     console.log(String(res).trim());
+                // })
         })
     },
     onDestroy() {
