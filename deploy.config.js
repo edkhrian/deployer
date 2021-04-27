@@ -6,7 +6,7 @@ module.exports = {
         {
             name: 'upload',
             src: [
-                '/path/to/dist',
+                './path/to/dist',
             ],
             dest: '/path/to/remote/folder'
         },
