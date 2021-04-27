@@ -10,9 +10,11 @@ module.exports = {
         return Promise.resolve();
     },
     onRun(taskData) {
-        if (!taskData.dest) throw new Error('No command folder');
+        if (!taskData.command) throw new Error('No command');
+        let execStr = taskData.src ? `cd ${taskData.src} && ` : '';
+        execStr += taskData.command || '';
         return this.ssh
-            .exec(`cd ${taskData.src} && ${taskData.command}`)
+            .exec(execStr)
             .then((data) => {
                 console.log(data.trim());
             });

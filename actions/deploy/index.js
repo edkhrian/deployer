@@ -36,9 +36,9 @@ module.exports = function(rootPath) {
                             console.log(`Task «${taskConfig.name}» completed`.green);
                             return task.onDestroy(taskConfig)
                         })
-                        .then(() => {
-                            console.log(`Task «${taskConfig.name}» destroyed`.green);
-                        })
+                        // .then(() => {
+                        //     console.log(`Task «${taskConfig.name}» destroyed`.green);
+                        // })
                 })
             })
             return promise;
