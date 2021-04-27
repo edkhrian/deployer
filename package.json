@@ -1,7 +1,7 @@
 {
   "name": "@edunse/deployer",
   "version": "1.2.0",
-  "description": "",
+  "description": "Let's make deployment great again",
   "main": "index.js",
   "scripts": {},
   "repository": {
@@ -12,7 +12,7 @@
     "deployer": "./bin/index.js"
   },
   "keywords": ["deploy", "deployment", "deploy nodejs server", "ssh", "sftp", "angular deployment"],
-  "author": "",
+  "author": "Eduard Khachatrian <contact@edunse.com> (https://edunse.com)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/edunse/deployer/issues"
