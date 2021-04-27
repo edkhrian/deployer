@@ -23,7 +23,7 @@ What it makes:
 
 Right after the initialization your config file will be located in root directory. You should change the content of it for your own purposes.
 
-## Example of config
+## Example of deploy.config.js
 
 ```javascript
 module.exports = {
