@@ -12,8 +12,8 @@ module.exports = {
         },
         {
             name: 'clear',
-            filesOlder: 24 * 3600 * 1000, // optional
             dest: '/path/to/remote/folder',
+            filesOlder: 24 * 3600 * 1000, // optional
             fileTest: /\.(js|css)$/ // optional
         },
         {
