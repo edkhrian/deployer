@@ -9,38 +9,50 @@ const availableTasks = {
     command: require('./task.command'),
     clear: require('./task.clear'),
 }
+const rootPath = process.cwd();
 
-module.exports = function(rootPath) {
-    return Promise
-        .resolve(path.join(rootPath, 'deploy.config.js'))
-        .then(configPath => {
-            if (!fs.existsSync(configPath)) throw new Error('Config file not found');
-            return require(configPath);
-        })
-        .then(config => {
-            if (!config.tasks || config.tasks.length == 0) throw new Error('No tasks');
+module.exports = async function(arguments) {
+    const credentialsPath = path.join(rootPath, 'deploy.credentials.js');
+    if (!fs.existsSync(credentialsPath)) throw new Error('Credentials file not found');
+    const credentials = require(credentialsPath);
+    if (!credentials.host) throw new Error('No host in credentials');
+    if (!credentials.username) throw new Error('No username in credentials');
+    if (!credentials.password) throw new Error('No password in credentials');
 
-            let promise = Promise.resolve()
-            config.tasks.forEach(taskConfig => {
-                if (!availableTasks[taskConfig.name]) return;
-                const task = availableTasks[taskConfig.name];
+    const configPath = path.join(rootPath, 'deploy.config.js');
+    if (!fs.existsSync(configPath)) throw new Error('Config file not found');
+    const config = require(configPath);
 
-                promise = promise.then(() => {
-                    return task
-                        .onInit(config, taskConfig)
-                        .then(() => {
-                            console.log(`Task «${taskConfig.name}» initialized`.green);
-                            return task.onRun(taskConfig)
-                        })
-                        .then(() => {
-                            console.log(`Task «${taskConfig.name}» completed`.green);
-                            return task.onDestroy(taskConfig)
-                        })
-                        // .then(() => {
-                        //     console.log(`Task «${taskConfig.name}» destroyed`.green);
-                        // })
+    const projectNames = Object.keys(config.projects || {});
+    const projectName = arguments[0] || (projectNames.length == 1 ? projectNames[0] : null);
+
+    if (!config.projects[projectName]) {
+        throw new Error(`Project «${projectName}» not found`);
+    }
+    const tasks = config.projects[projectName];
+    if (tasks.length == 0) throw new Error('No tasks');
+
+    let promise = Promise.resolve()
+    tasks.forEach(taskConfig => {
+        const task = availableTasks[taskConfig.name];
+        if (!task) return;
+
+        promise = promise.then(() => {
+            return task
+                .onInit(credentials)
+                .then(() => {
+                    console.log(`Task «${taskConfig.name}» initialized`.green);
+                    return task.onRun(taskConfig)
                 })
-            })
-            return promise;
+                .then(() => {
+                    console.log(`Task «${taskConfig.name}» completed`.green);
+                    return task.onDestroy(taskConfig)
+                })
+            // .then(() => {
+            //     console.log(`Task «${taskConfig.name}» destroyed`.green);
+            // })
         })
+    })
+
+    return promise;
 }

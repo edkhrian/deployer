@@ -4,13 +4,13 @@ const Client = require('ssh2-sftp-client');
 const sftpClient = new Client();
 
 module.exports = {
-    onInit(config, data) {
+    onInit(credentials) {
         return sftpClient
             .connect({
-                host: config.host,
+                host: credentials.host,
                 port: '22',
-                username: config.username,
-                password: config.password
+                username: credentials.username,
+                password: credentials.password
             })
     },
     onRun(taskData) {

@@ -1,11 +1,11 @@
 const SSH2Promise = require('ssh2-promise');
 
 module.exports = {
-    onInit(config, data) {
+    onInit(credentials) {
         this.ssh = new SSH2Promise({
-            host: config.host,
-            username: config.username,
-            password: config.password
+            host: credentials.host,
+            username: credentials.username,
+            password: credentials.password
         })
         return Promise.resolve();
     },

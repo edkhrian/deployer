@@ -2,10 +2,45 @@ const path = require('path');
 const fs = require('fs');
 const writePackage = require('write-pkg');
 
-function copyFileIfNotExists(fromPath, toPath) {
+const rootPath = process.cwd();
+
+module.exports = async function() {
+    // copy config files
+    await copyFile('deploy.config.js');
+
+    await copyFile('deploy.credentials.js');
+
+    // edit .gitignore
+    const ignoreStr = '# @edunse/deployer\n\ndeploy.credentials.js';
+    const targetGitIgnorePath = path.join(rootPath, '.gitignore');
+    if (fs.existsSync(targetGitIgnorePath)) {
+        let data = fs.readFileSync(targetGitIgnorePath, 'utf-8');
+        if (!/deploy\.credentials\.js/.test(data)) {
+            data += '\n\n' + ignoreStr;
+            fs.writeFileSync(targetGitIgnorePath, data, 'utf-8');
+        }
+    } else {
+        fs.writeFileSync(targetGitIgnorePath, ignoreStr, 'utf-8');
+    }
+
+    // update package.json deploy script
+    const targetPackagePath = path.join(rootPath, 'package.json');
+    if (!fs.existsSync(targetPackagePath)) return;
+
+    const targetPackage = require(targetPackagePath);
+    if (targetPackage.scripts['deploy']) return;
+    targetPackage.scripts['deploy'] = 'deployer deploy';
+
+    return writePackage(targetPackagePath, targetPackage);
+};
+
+function copyFile(fileName) {
+    const src = path.join(__dirname, fileName);
+    const target =  path.join(rootPath, fileName);
+
     return new Promise((resolve, reject) => {
-        if (!fs.existsSync(toPath)) {
-            fs.copyFile(fromPath, toPath, (err) => {
+        if (!fs.existsSync(target)) {
+            fs.copyFile(src, target, (err) => {
                 if (err) return reject(err);
                 resolve();
             });
@@ -14,36 +49,3 @@ function copyFileIfNotExists(fromPath, toPath) {
         }
     });
 }
-
-module.exports = function(rootPath) {
-    const srcConfigPath = path.join(__dirname, './example.deploy.config.js');
-    const targetConfigPath =  path.join(rootPath, 'deploy.config.js');
-
-    // copy config file
-    return copyFileIfNotExists(srcConfigPath, targetConfigPath)
-        // edit .gitignore
-        .then(() => {
-            const ignoreStr = '# @edunse/deployer\n\ndeploy.config.js';
-            const targetGitIgnorePath = path.join(rootPath, '.gitignore');
-            if (fs.existsSync(targetGitIgnorePath)) {
-                let data = fs.readFileSync(targetGitIgnorePath, 'utf-8');
-                if (!/deploy\.config\.js/.test(data)) {
-                    data += '\n\n' + ignoreStr;
-                    fs.writeFileSync(targetGitIgnorePath, data, 'utf-8');
-                }
-            } else {
-                fs.writeFileSync(targetGitIgnorePath, ignoreStr, 'utf-8');
-            }
-        })
-        // update package.json deploy script
-        .then(() => {
-            const targetPackagePath = path.join(rootPath, 'package.json');
-            if (!fs.existsSync(targetPackagePath)) return;
-
-            const targetPackage = require(targetPackagePath);
-            if (targetPackage.scripts['deploy']) return;
-            targetPackage.scripts['deploy'] = 'deployer deploy';
-
-            return writePackage(targetPackagePath, targetPackage);
-        })
-};

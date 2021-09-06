@@ -2,12 +2,12 @@ const path = require('path');
 const FTPS = require('ftps');
 
 module.exports = {
-    onInit(config, data) {
+    onInit(credentials) {
         this.ftps = new FTPS({
-            host: config.host,
+            host: credentials.host,
             port: '22',
-            username: config.username,
-            password: config.password,
+            username: credentials.username,
+            password: credentials.password,
             protocol: 'sftp',
             autoConfirm: true
         });
