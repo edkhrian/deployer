@@ -1,12 +1,13 @@
 module.exports = {
-    default: {
-        tasks: [
+    projects: {
+        default: [
             {
                 name: 'upload',
                 src: [
                     './path/to/dist',
                 ],
-                dest: '/path/to/remote/folder'
+                dest: '/path/to/remote/folder',
+                // fileTest: /test.js/
             },
             {
                 name: 'clear',

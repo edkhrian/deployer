@@ -26,9 +26,8 @@ module.exports = async function(arguments) {
     const projectNames = Object.keys(config.projects || {});
     const projectName = arguments[0] || (projectNames.length == 1 ? projectNames[0] : null);
 
-    if (!config.projects[projectName]) {
-        throw new Error(`Project «${projectName}» not found`);
-    }
+    if (!config.projects[projectName]) throw new Error(`Project «${projectName}» not found`);
+
     const tasks = config.projects[projectName];
     if (tasks.length == 0) throw new Error('No tasks');
 

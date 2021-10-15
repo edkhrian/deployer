@@ -11,17 +11,15 @@ module.exports = async function() {
     await copyFile('deploy.credentials.js');
 
     // edit .gitignore
-    const ignoreStr = '# @edunse/deployer\n\ndeploy.credentials.js';
+    let ignoreStr = '# @edunse/deployer\n\ndeploy.credentials.js';
     const targetGitIgnorePath = path.join(rootPath, '.gitignore');
     if (fs.existsSync(targetGitIgnorePath)) {
-        let data = fs.readFileSync(targetGitIgnorePath, 'utf-8');
-        if (!/deploy\.credentials\.js/.test(data)) {
-            data += '\n\n' + ignoreStr;
-            fs.writeFileSync(targetGitIgnorePath, data, 'utf-8');
+        let oldGitIgnoreStr = fs.readFileSync(targetGitIgnorePath, 'utf-8');
+        if (!/deploy\.credentials\.js/.test(oldGitIgnoreStr)) {
+            ignoreStr = oldGitIgnoreStr + '\n\n' + ignoreStr;
         }
-    } else {
-        fs.writeFileSync(targetGitIgnorePath, ignoreStr, 'utf-8');
     }
+    fs.writeFileSync(targetGitIgnorePath, ignoreStr, 'utf-8');
 
     // update package.json deploy script
     const targetPackagePath = path.join(rootPath, 'package.json');

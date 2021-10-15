@@ -18,12 +18,15 @@ module.exports = {
             let srcList = typeof taskData.src == 'string' ? [taskData.src] : taskData.src;
             srcList.forEach((relativePath) => {
                 const localDir = path.join(process.cwd(), relativePath);
+                const fileTest = taskData.fileTest ? new RegExp(taskData.fileTest) : null;
+                const filter = '(?=^[^.])' + (fileTest ? '(' + fileTest.source + ')' : '');
+
                 this.ftps = this.ftps.mirror({
-                    remoteDir: taskData.dest,
+                    remoteDir: taskData.dest.replace(/\\|\/$/, ''),
                     localDir: localDir,
                     parallel: true,
                     upload: true,
-                    filter: taskData.filter,
+                    filter: new RegExp(filter),
                     options: '--verbose=2 --overwrite'
                 })
             });
