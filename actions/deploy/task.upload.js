@@ -16,17 +16,17 @@ module.exports = {
     onRun(taskData) {
         return new Promise((resolve, reject) => {
             let srcList = typeof taskData.src == 'string' ? [taskData.src] : taskData.src;
+
             srcList.forEach((relativePath) => {
                 const localDir = path.join(process.cwd(), relativePath);
-                const fileTest = taskData.fileTest ? new RegExp(taskData.fileTest) : null;
-                const filter = '(?=^[^.])' + (fileTest ? '(' + fileTest.source + ')' : '');
+                const fileTest = taskData.fileTest ? new RegExp(taskData.fileTest) : /\w+\.\w+$/;
 
                 this.ftps = this.ftps.mirror({
                     remoteDir: taskData.dest.replace(/\\|\/$/, ''),
                     localDir: localDir,
                     parallel: true,
                     upload: true,
-                    filter: new RegExp(filter),
+                    filter: fileTest,
                     options: '--verbose=2 --overwrite'
                 })
             });
