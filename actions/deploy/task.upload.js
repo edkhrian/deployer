@@ -9,7 +9,8 @@ module.exports = {
             username: credentials.username,
             password: credentials.password,
             protocol: 'sftp',
-            autoConfirm: true
+            autoConfirm: true,
+            escape: false
         });
         return Promise.resolve();
     },
