@@ -23,8 +23,8 @@ module.exports = {
                 const fileTest = taskData.fileTest ? new RegExp(taskData.fileTest) : /\w+\.\w+$/;
 
                 this.ftps = this.ftps.mirror({
-                    remoteDir: taskData.dest.replace(/\\|\/$/, ''),
-                    localDir: localDir,
+                    remoteDir: this.ftps.escapeshell(taskData.dest.replace(/\\|\/$/, '')),
+                    localDir: this.ftps.escapeshell(localDir),
                     parallel: true,
                     upload: true,
                     filter: fileTest,
