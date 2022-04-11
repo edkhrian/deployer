@@ -19,49 +19,43 @@ deployer init # then run the initialization
 ```
 
 What it makes:
-1. Creates empty config files in the root directory (**deploy.config.js** and **deploy.credentials.js**);
+1. Creates empty config files in the root directory (**deploy.tasks.js** and **deploy.credentials.js**);
 2. Adds the credential config file name to .gitignore (because it's bad to push username/password to a repository);
-2. Adds a deployment script to package.json (to make a deployment with **npm run deploy** script).
 
 Right after the initialization your config files will be located in the root directory. You should change their content to your own purposes.
 
 ## Example of deploy.config.js
 
 ```javascript
-module.exports = {
-    // multiple projects can be set and deployed later separately
-    projects: {
-        default: [
-            // list of tasks, they will be running in the presented order one after another
-            // there is 3 types of tasks available: upload, clear, command
-            {
-                name: 'upload',
-                src: './dist/browser',
-                dest: '/home/browser',
-                fileTest: /server.js/, // optional, RegExp to test files for uploading
-            },
-            {
-                name: 'upload',
-                src: [
-                    './dist/style',
-                    './dist/assets'
-                ],
-                dest: '/home/browser/assets',
-            },
-            {
-                name: 'clear', // remove files on the server
-                dest: '/home/browser', // in the remote folder
-                filesOlder: 24 * 3600 * 1000, // optional, files older than the value (milliseconds)
-                fileTest: /\.(js|css)$/, // optional, RegExp to test files for removing
-            },
-            {
-                name: 'command', // run a command
-                src: '/home/server', // optional, will go to the folder before running the command
-                command: 'pm2 restart server', // result of this command will be shown in console
-            }
-        ]
+module.exports = [
+    // list of tasks, they will be running in the presented order one after another
+    // there are 3 types of tasks available: upload, delete, run
+    {
+        name: 'upload',
+        src: [
+            './dist/style.css',
+            './dist/**.js',
+        ],
+        dest: '/home/public'
+    },
+    {
+        name: 'delete', // remove files on the server
+        src: [
+            '/home/public/*.js', // in the remote folder
+        ],
+        // optional, check which files to delete
+        test: (file) => {
+            return Date.now() - file.modifyTime > 24 * 3600 * 1000;
+        }
+    },
+    {
+        name: 'run', // run commands
+        commands: [
+            'cd /home/public',
+            'pm2 restart server'
+        ],
     }
-};
+];
 ```
 
 ## Example of deploy.credentials.js
@@ -74,15 +68,10 @@ module.exports = {
 ```
 ## Usage
 
-To execute tasks in a config file for specific project (if a project name is omitted and there is only one project in config file then that project will be used), run the command:
+To execute tasks from a config file run the command:
 ```bash
-deployer deploy [project name]
+deployer deploy
 ```
-or if you initialized an environment:
-```bash
-npm run deploy
-```
-
 
 [npm-url]: https://www.npmjs.com/package/@edunse/deployer
 [npm-icon]: https://img.shields.io/npm/v/@edunse/deployer.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen

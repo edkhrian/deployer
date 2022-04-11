@@ -16,13 +16,15 @@ try {
         throw new Error(`Invalid action name. Available actions: ${availableActions.join(', ')}`)
     }
 
-    const credentialsPath = path.join(config.projectPath, 'deploy.credentials.js');
-    if (!fs.existsSync(credentialsPath)) throw new Error('Credentials file not found');
-    config.credentials = require(credentialsPath);
+    if (config.actionName == 'deploy') {
+        const credentialsPath = path.join(config.projectPath, 'deploy.credentials.js');
+        if (!fs.existsSync(credentialsPath)) throw new Error('Credentials file not found');
+        config.credentials = require(credentialsPath);
 
-    if (!config.credentials.host) throw new Error('No host');
-    if (!config.credentials.username) throw new Error('No username');
-    if (!config.credentials.password) throw new Error('No password');
+        if (!config.credentials.host) throw new Error('No host');
+        if (!config.credentials.username) throw new Error('No username');
+        if (!config.credentials.password) throw new Error('No password');
+    }
 
     if (config.actionName == 'deploy') {
         const tasksPath = path.join(config.projectPath, 'deploy.tasks.js');

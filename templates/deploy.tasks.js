@@ -2,16 +2,18 @@ module.exports = [
     {
         name: 'upload',
         src: [
-            './path/to/dist',
+            './dist/**/*',
         ],
-        dest: '/path/to/remote/folder',
-        // fileTest: /test.js/
+        dest: '/home/frontend'
     },
     {
         name: 'delete',
-        src: '/path/to/remote/folder/*.js',
-        filesOlder: 24 * 3600 * 1000, // optional
-        // fileTest: /\.(js|css)$/ // optional
+        src: [
+            '/home/frontend/*.js', // no nesting
+        ],
+        // test: (file) => {
+        //     return Date.now() - file.modifyTime > 24 * 3600 * 1000;
+        // }
     },
     {
         name: 'run',
