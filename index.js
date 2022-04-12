@@ -23,7 +23,12 @@ gulp.task('deploy', () => {
             case 'upload':
                 return function() {
                     task.src = Array.isArray(task.src) ? task.src : [task.src];
-                    task.src = task.src.map(value => path.join(config.projectPath, value))
+                    task.src = task.src.map(value => {
+                        if (value.startsWith('!')) {
+                            return value;
+                        }
+                        return path.join(config.projectPath, value);
+                    });
                     return gulp
                         .src(task.src)
                         .pipe(gulpSSH.dest(task.dest));
@@ -31,6 +36,7 @@ gulp.task('deploy', () => {
             case 'run':
                 return function() {
                     return gulpSSH.shell(task.commands);
+                    // TODO show result in console
                 };
             case 'delete':
                 return async () => {
@@ -104,3 +110,12 @@ gulp.task('init', () => {
 });
 
 gulp.task(config.actionName)();
+
+process.on('uncaughtException', function(err) {
+    if (err.context && err.context.error) {
+        console.log('Error: ' + err.context.error.message);
+    } else {
+        console.log(err);
+    }
+    process.exit(0);
+});

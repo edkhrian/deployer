@@ -35,6 +35,7 @@ module.exports = [
         src: [
             './dist/style.css',
             './dist/**.js',
+            '!**/upload/**',
         ],
         dest: '/home/public'
     },
