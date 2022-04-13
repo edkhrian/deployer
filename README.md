@@ -33,9 +33,8 @@ module.exports = [
     {
         name: 'upload',
         src: [
-            './dist/style.css',
-            './dist/**.js',
-            '!**/upload/**',
+            './dist/**/*',
+            '!./dist/templates/**',
         ],
         dest: '/home/public'
     },

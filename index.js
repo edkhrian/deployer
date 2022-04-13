@@ -23,12 +23,7 @@ gulp.task('deploy', () => {
             case 'upload':
                 return function() {
                     task.src = Array.isArray(task.src) ? task.src : [task.src];
-                    task.src = task.src.map(value => {
-                        if (value.startsWith('!')) {
-                            return value;
-                        }
-                        return path.join(config.projectPath, value);
-                    });
+
                     return gulp
                         .src(task.src)
                         .pipe(gulpSSH.dest(task.dest));

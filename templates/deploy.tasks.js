@@ -3,7 +3,7 @@ module.exports = [
         name: 'upload',
         src: [
             './dist/**/*',
-            '!**/upload/**',
+            '!./dist/templates/**',
         ],
         dest: '/home/frontend'
     },
