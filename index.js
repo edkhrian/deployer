@@ -64,14 +64,18 @@ gulp.task('deploy', () => {
                         if (task.test) {
                             files = files.filter(file => task.test(file));
                         }
-                        files = files.map(file => path.join(item.path, file.name));
+                        files = files.map(file => path.join(item.path, file.name).replace(/\\/g, '/'));
 
                         removeFiles = removeFiles.concat(files);
                     }));
 
                     await Promise.all(removeFiles.map(async filePath => {
-                        await client.delete(filePath);
-                        log(`Deleted: ${filePath}`);
+                        try {
+                          await client.delete(filePath);
+                          log(`Deleted: ${filePath}`);
+                        } catch(e) {
+                          log(`Error deleting ${filePath}: ${e.message || 'no error message'}`);
+                        }
                     }));
 
                     return client.end();
