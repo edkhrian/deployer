@@ -1,6 +1,6 @@
 {
   "name": "@edkhrian/deployer",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Let's make deployment great again",
   "main": "index.js",
   "scripts": {},
@@ -19,7 +19,7 @@
     "sftp",
     "angular deployment"
   ],
-  "author": "Eduard Khachatrian <contact@edkhrian.com>",
+  "author": "Eduard Khachatrian",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/edkhrian/deployer/issues"
