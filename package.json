@@ -1,12 +1,12 @@
 {
-  "name": "@edunse/deployer",
+  "name": "@edkhrian/deployer",
   "version": "2.0.7",
   "description": "Let's make deployment great again",
   "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://edunse@github.com/edunse/deployer.git"
+    "url": "git+https://edkhrian@github.com/edkhrian/deployer.git"
   },
   "bin": {
     "deployer": "./index.js"
@@ -19,12 +19,12 @@
     "sftp",
     "angular deployment"
   ],
-  "author": "Eduard Khachatrian <contact@edunse.com> (https://edunse.com)",
+  "author": "Eduard Khachatrian <contact@edkhrian.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/edunse/deployer/issues"
+    "url": "https://github.com/edkhrian/deployer/issues"
   },
-  "homepage": "https://github.com/edunse/deployer#readme",
+  "homepage": "https://github.com/edkhrian/deployer#readme",
   "dependencies": {
     "fancy-log": "^2.0.0",
     "gulp": "^4.0.2",

@@ -7,7 +7,7 @@ It mainly used by myself to deploy express.js servers or Angular 2+ projects (An
 ## Install
 Just install this module globally:
 ```bash
-npm install -g @edunse/deployer
+npm install -g @edkhrian/deployer
 ```
 
 ## Setup
@@ -73,5 +73,5 @@ To execute tasks from a config file run the command:
 deployer deploy
 ```
 
-[npm-url]: https://www.npmjs.com/package/@edunse/deployer
-[npm-icon]: https://img.shields.io/npm/v/@edunse/deployer.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen
+[npm-url]: https://www.npmjs.com/package/@edkhrian/deployer
+[npm-icon]: https://img.shields.io/npm/v/@edkhrian/deployer.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen

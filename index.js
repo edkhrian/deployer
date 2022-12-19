@@ -90,8 +90,8 @@ gulp.task('init', () => {
         () => {
             return gulp.src(path.join(config.projectPath, '.gitignore'), { allowEmpty: true })
                 .pipe(replace(/$/, function (match) {
-                    if (this.file.contents.toString().includes('@edunse/deployer')) return match;
-                    return '\n\n# @edunse/deployer\ndeploy.credentials.js';
+                    if (this.file.contents.toString().includes('@edkhrian/deployer')) return match;
+                    return '\n\n# @edkhrian/deployer\ndeploy.credentials.js';
                 }))
                 .pipe(gulp.dest(config.projectPath));
         },
